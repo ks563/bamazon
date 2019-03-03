@@ -1,0 +1,2 @@
+# bamazon
+sql cli app
