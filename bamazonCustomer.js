@@ -45,7 +45,7 @@ function customerChoice() {
     ]).then(function (answer) {
         var itemID = answer.productID;
         var itemAmt = answer.productAmt;
-     
+
         customerOrder(itemID, itemAmt);
         showProduct();
     })
@@ -58,19 +58,24 @@ function customerOrder(ID, amt) {
             item_id: ID
         }
     ), function (err, res) {
-            if (err) {
-                console.log(err);
+        if (err) {
+            console.log(err);
         } else if (amt <= res[0].stock_quantity) {
-            var totalPrice = amt * res[0].price;
-            console.log(totalPrice);
-            connection.query(
-                "UPDATE product SET product_amt= " + res[0].stock_quantity - amt + "WHERE ? ",
-                {
-                    item_id: ID
-                }
-            )
+            console.log("placing order!");
+            updateDB(itemID, itemAmt, res[0].stock_quantity, res[0].price);
         } else {
-        console.log("we do not have enough product to fill your order");
+            console.log("we do not have enough product to fill your order");
+        }
     }
 }
+
+function updateDB(ID, amt, quantity, price) {
+    var totalPrice = amt * price;
+    console.log(totalPrice);
+    connection.query(
+        "UPDATE product SET product_amt= " + res[0].stock_quantity - amt + "WHERE ? ",
+        {
+            item_id: ID
+        }
+    )
 }
