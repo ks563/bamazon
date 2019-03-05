@@ -53,7 +53,13 @@ function customerChoice() {
 function customerOrder(ID, amt) {
     connection.query(
         "SELECT * FROM product WHERE item_id = " + ID, function (err, res) {
-            
+            if (err) {
+                console.log(err);
+            }else if (amt > res.stock_quantity) {
+                console.log("we do not have enough product to fill your order");
+            } else (amt <= res.stock_quantity){
+                
+            }
         }
     )   
 }
