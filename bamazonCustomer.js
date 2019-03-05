@@ -45,6 +45,7 @@ function customerChoice() {
     ]).then(function (answer) {
         var itemID = answer.productID;
         var itemAmt = answer.productAmt;
+     
         customerOrder(itemID, itemAmt);
         showProduct();
     })
@@ -52,14 +53,21 @@ function customerChoice() {
 
 function customerOrder(ID, amt) {
     connection.query(
-        "SELECT * FROM product WHERE item_id = " + ID), function (err, res) {
+        "SELECT * FROM product WHERE ?",
+        {
+            item_id: ID
+        }
+    ), function (err, res) {
             if (err) {
                 console.log(err);
-        } else if (amt <= res.stock_quantity) {
-            var totalPrice = amt * res.price;
+        } else if (amt <= res[0].stock_quantity) {
+            var totalPrice = amt * res[0].price;
             console.log(totalPrice);
             connection.query(
-                "UPDATE product SET product_amt= " + res.stock_quantity - amt + "WHERE item_id = " + ID
+                "UPDATE product SET product_amt= " + res[0].stock_quantity - amt + "WHERE ? ",
+                {
+                    item_id: ID
+                }
             )
         } else {
         console.log("we do not have enough product to fill your order");
