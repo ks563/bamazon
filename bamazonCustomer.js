@@ -55,11 +55,11 @@ function customerOrder(ID, amt) {
         "SELECT * FROM product WHERE item_id = " + ID, function (err, res) {
             if (err) {
                 console.log(err);
-            }else if (amt > res.stock_quantity) {
+            }else if (amt <= res.stock_quantity) {
+                var totalPrice = amt * res.price;
+                console.log(totalPrice);
+            }else {
                 console.log("we do not have enough product to fill your order");
-            } else (amt <= res.stock_quantity){
-                
-            }
         }
     )   
 }
