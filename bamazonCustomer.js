@@ -51,5 +51,9 @@ function customerChoice() {
 };
 
 function customerOrder(ID, amt) {
-    
+    connection.query(
+        "SELECT * FROM product WHERE item_id = " + ID, function (err, res) {
+            
+        }
+    )   
 }
