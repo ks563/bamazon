@@ -43,12 +43,13 @@ function customerChoice() {
             name: "productAmt"
         }
     ]).then(function (answer) {
-        connection.query(
-            "SELECT item_id FROM product WHERE ?",
-            [{
-                item_id: answer.productAmt
-            }]
-            ""
-        )
+        var itemID = answer.productID;
+        var itemAmt = answer.productAmt;
+        customerOrder(itemID, itemAmt);
+        
     })
+};
+
+function customerOrder(ID, amt) {
+    
 }
