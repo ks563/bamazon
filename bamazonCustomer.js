@@ -30,6 +30,42 @@ connection.connect(function (err) {
 });
 
 
+var updateDB = function(ID, amt, quantity, price) {
+    var totalPrice = amt * price;
+    console.log(totalPrice);
+    connection.query(
+        "UPDATE product SET product_amt= " + res[0].stock_quantity - amt + "WHERE ? ",
+        {
+            item_id: ID
+        }
+    )
+    connection.query(
+        "SELECT * FROM product", function (err, res) {
+            console.table(res);
+        }
+    )
+}
+
+var customerOrder = function (ID, amt) {
+    console.log("order function");
+    connection.query(
+        "SELECT * FROM product WHERE ?",
+        {
+            item_id: ID
+        }
+    ), function (err, res) {
+        console.log(res);
+        if (err) {
+            console.log(err);
+        } else if (amt <= res[0].stock_quantity) {
+            console.log("placing order!");
+            updateDB(itemID, itemAmt, res[0].stock_quantity, res[0].price);
+        } else {
+            console.log("we do not have enough product to fill your order");
+        }
+    }
+}
+
 
 function customerChoice() {
     inquirer.prompt([
@@ -45,37 +81,8 @@ function customerChoice() {
     ]).then(function (answer) {
         var itemID = answer.productID;
         var itemAmt = answer.productAmt;
-
+        console.log(answer);
         customerOrder(itemID, itemAmt);
-        showProduct();
     })
 };
 
-function customerOrder(ID, amt) {
-    connection.query(
-        "SELECT * FROM product WHERE ?",
-        {
-            item_id: ID
-        }
-    ), function (err, res) {
-        if (err) {
-            console.log(err);
-        } else if (amt <= res[0].stock_quantity) {
-            console.log("placing order!");
-            updateDB(itemID, itemAmt, res[0].stock_quantity, res[0].price);
-        } else {
-            console.log("we do not have enough product to fill your order");
-        }
-    }
-}
-
-function updateDB(ID, amt, quantity, price) {
-    var totalPrice = amt * price;
-    console.log(totalPrice);
-    connection.query(
-        "UPDATE product SET product_amt= " + res[0].stock_quantity - amt + "WHERE ? ",
-        {
-            item_id: ID
-        }
-    )
-}
