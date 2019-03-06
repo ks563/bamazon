@@ -30,11 +30,11 @@ connection.connect(function (err) {
 });
 
 
-var updateDB = function(ID, amt, quantity, price) {
+function updateDB (ID, amt, quantity, price) {
     var totalPrice = amt * price;
     console.log(totalPrice);
     connection.query(
-        "UPDATE product SET product_amt= " + res[0].stock_quantity - amt + "WHERE ? ",
+        "UPDATE product SET product_amt= " + quantity - amt + "WHERE ? ",
         {
             item_id: ID
         }
@@ -46,7 +46,7 @@ var updateDB = function(ID, amt, quantity, price) {
     )
 }
 
-var customerOrder = function (ID, amt) {
+function customerOrder(ID, amt) {
     console.log("order function");
     connection.query(
         "SELECT * FROM product WHERE ?",
@@ -81,7 +81,7 @@ function customerChoice() {
     ]).then(function (answer) {
         var itemID = answer.productID;
         var itemAmt = answer.productAmt;
-        console.log(answer);
+        // console.log(answer);
         customerOrder(itemID, itemAmt);
     })
 };
