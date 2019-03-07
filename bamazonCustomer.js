@@ -46,24 +46,6 @@ function updateDB(ID, amt, quantity, price) {
     )
 }
 
-// function customerOrder(ID, amt) {
-//     console.log("order function");
-//     connection.query(
-//         "SELECT * FROM product WHERE item_id = " + ID
-//     ), function (err, res) {
-//         console.log(res);
-//         if (err) {
-//             console.log(err);
-//         } if (amt <= res[0].stock_quantity) {
-//             console.log("placing order!");
-//             updateDB(itemID, itemAmt, res[0].stock_quantity, res[0].price);
-//         } else {
-//             console.log("we do not have enough product to fill your order");
-//         }
-//     }
-// }
-
-
 function customerChoice() {
     inquirer.prompt([
         {
@@ -79,9 +61,9 @@ function customerChoice() {
         var itemID = answer.productID;
         var productAmt = answer.productAmt;
         connection.query(
-            ("SELECT * FROM product WHERE ?",
-                {item_id: itemID}
-            ), function (err, res) {
+            "SELECT * FROM product WHERE ?",
+                { item_id: itemID }
+            , function (err, res) {
                 if (err) throw (err);
                 if (productAmt <= res[0].stock_quantity) {
                     console.log("placing order!");
