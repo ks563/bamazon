@@ -46,25 +46,22 @@ function updateDB (ID, amt, quantity, price) {
     )
 }
 
-function customerOrder(ID, amt) {
-    console.log("order function");
-    connection.query(
-        "SELECT * FROM product WHERE ?",
-        {
-            item_id: ID
-        }
-    ), function (err, res) {
-        console.log(res);
-        if (err) {
-            console.log(err);
-        } else if (amt <= res[0].stock_quantity) {
-            console.log("placing order!");
-            updateDB(itemID, itemAmt, res[0].stock_quantity, res[0].price);
-        } else {
-            console.log("we do not have enough product to fill your order");
-        }
-    }
-}
+// function customerOrder(ID, amt) {
+//     console.log("order function");
+//     connection.query(
+//         "SELECT * FROM product WHERE item_id = " + ID
+//     ), function (err, res) {
+//         console.log(res);
+//         if (err) {
+//             console.log(err);
+//         } if (amt <= res[0].stock_quantity) {
+//             console.log("placing order!");
+//             updateDB(itemID, itemAmt, res[0].stock_quantity, res[0].price);
+//         } else {
+//             console.log("we do not have enough product to fill your order");
+//         }
+//     }
+// }
 
 
 function customerChoice() {
@@ -82,7 +79,22 @@ function customerChoice() {
         var itemID = answer.productID;
         var itemAmt = answer.productAmt;
         // console.log(answer);
-        customerOrder(itemID, itemAmt);
+        connection.query(
+            "SELECT * FROM product WHERE ?",
+            {
+                item_id: answer.productID
+            }
+        ), function (err, res) {
+            console.log(res);
+            if (err) {
+                console.log(err);
+            } if (amt <= res[0].stock_quantity) {
+                console.log("placing order!");
+                updateDB(itemID, itemAmt, res[0].stock_quantity, res[0].price);
+            } else {
+                console.log("we do not have enough product to fill your order");
+            }
+        }
     })
 };
 
