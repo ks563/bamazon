@@ -76,13 +76,16 @@ function customerChoice() {
             name: "productAmt"
         }
     ]).then(function (answer) {
+        var itemID = answer.productID;
+        var productAmt = answer.productAmt;
         connection.query(
-            ("SELECT * FROM products WHERE ?", { item_id: answer.productID }
+            ("SELECT * FROM product WHERE ?",
+                {item_id: itemID}
             ), function (err, res) {
-                if (err) throw err
-                if (answer.productAmt <= res[0].stock_quantity) {
+                if (err) throw (err);
+                if (productAmt <= res[0].stock_quantity) {
                     console.log("placing order!");
-                    updateDB(answer.productID, answer.productAmt, res[0].stock_quantity, res[0].price);
+                    updateDB(itemID, productAmt, res[0].stock_quantity, res[0].price);
                 } else {
                     console.log("we do not have enough product to fill your order");
                 }
