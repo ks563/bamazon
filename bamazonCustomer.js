@@ -32,12 +32,16 @@ connection.connect(function (err) {
 
 function updateDB(ID, amt, quantity, price) {
     var totalPrice = amt * price;
-    console.log(totalPrice);
+    var updateAmt = quantity - amt;
+    console.log("your total price is " + totalPrice);
     connection.query(
-        "UPDATE product SET product_amt= " + quantity - amt + "WHERE ? ",
-        {
+        "UPDATE product SET ? WHERE ? ",
+        [{
+            stock_quantity: updateAmt
+        },
+            {
             item_id: ID
-        }
+        }]
     )
     connection.query(
         "SELECT * FROM product", function (err, res) {
