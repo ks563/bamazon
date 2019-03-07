@@ -30,7 +30,7 @@ connection.connect(function (err) {
 });
 
 
-function updateDB (ID, amt, quantity, price) {
+function updateDB(ID, amt, quantity, price) {
     var totalPrice = amt * price;
     console.log(totalPrice);
     connection.query(
@@ -76,25 +76,17 @@ function customerChoice() {
             name: "productAmt"
         }
     ]).then(function (answer) {
-        var itemID = answer.productID;
-        var itemAmt = answer.productAmt;
-        // console.log(answer);
         connection.query(
-            "SELECT * FROM product WHERE ?",
-            {
-                item_id: answer.productID
+            ("SELECT * FROM products WHERE ?", { item_id: answer.productID }
+            ), function (err, res) {
+                if (err) throw err
+                if (answer.productAmt <= res[0].stock_quantity) {
+                    console.log("placing order!");
+                    updateDB(answer.productID, answer.productAmt, res[0].stock_quantity, res[0].price);
+                } else {
+                    console.log("we do not have enough product to fill your order");
+                }
             }
-        ), function (err, res) {
-            console.log(res);
-            if (err) {
-                console.log(err);
-            } if (amt <= res[0].stock_quantity) {
-                console.log("placing order!");
-                updateDB(itemID, itemAmt, res[0].stock_quantity, res[0].price);
-            } else {
-                console.log("we do not have enough product to fill your order");
-            }
-        }
+        )
     })
 };
-
