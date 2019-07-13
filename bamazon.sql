@@ -10,7 +10,6 @@ CREATE TABLE product (
     price INTEGER(10) NOT NULL,
     stock_quantity INTEGER(10) NOT NULL,    
     PRIMARY KEY (item_id)
-    
 );
 
 
